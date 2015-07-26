@@ -7,12 +7,13 @@
 | - add readme files |
 | - organize project structure |
 
-
+'''
+'''
 data-handler scope:
 - read data sets
 - clean data
 - merge and filter data sets
 
-univ-performance scope:
+ univ-performance scope:
 - perform univariate and multivariate analysis
 - produce graphs
