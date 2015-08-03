@@ -26,7 +26,7 @@ class SetupIPEDSData:
         self.df_dist = pd.DataFrame()
         
        
-    def read_datasets(self):
+    def read_maindata(self):
         self.df_main = pd.read_csv(self.__filein_main, 
              sep = ',',
              # read the specified variables as object     
@@ -76,11 +76,10 @@ class SetupIPEDSData:
              "sector",
              "sector_revised"
         ])
-         
-         
+
     def filter_maindata(self):
         '''
-        Filter the main datasets based on 
+        Filter the main data based on 
         1) year 2012
         2) sectors: 1='Public 4-year or above', 2='Private nonprofit 4-year or above',
                     3='Private for-profit 4-year or above'
@@ -92,17 +91,20 @@ class SetupIPEDSData:
         tmp = tmp[tmp['sector_revised'].isin(['1','2','3'])] # note that sector is read as object
         self.df_main = tmp
 
-
     def detect_nan_retrate(self):
         '''
-            
+        detect nan elements in ftretention_rate column
+        and put it into newly created 'not_missing' column
         '''
+        self.df_main['missing_ret'] = np.isnan(self.df_main.ftretention_rate)
 
-
+    def read_distdata(self):
+        self.df_dist = pd.read_csv(self.__filein_dist)
         
-        not_missing = ~np.isnan(FourYr['ftretention_rate'])
-        FourYr.loc[:,'not_missing'] = not_missing
-
+    def filter_distdata(self):
+        '''
+        Filter the distance data base on level of student (undergrad)
+        '''
         
         
         
@@ -110,14 +112,6 @@ class SetupIPEDSData:
         
     # private variables
     __filein_main = '../data/IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
-    __filein_dist = '../data/EF2013A_DIST/ef2012a_dist_rv.csv'
+#    __filein_dist = '../data/EF2012A_DIST/ef2012a_dist_rv.csv'
+    __filein_dist = '../data/EF2013A_DIST/ef2013a_dist.csv'
 
-
-    
-    
-
-
-
-'''
-filein = 'IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
-''' 
