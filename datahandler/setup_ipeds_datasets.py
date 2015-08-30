@@ -2,6 +2,8 @@
 """
 Created on Sun Jul 26 11:16:26 2015
 
+Use get_data() method to get the data
+
 @author: takahirodoi
 """
 
@@ -17,14 +19,12 @@ class SetupIPEDSData:
     Also, detect nan in the retentionrate entry and add that info to
     the main dataframe
     '''
-
     def __init__(self):
         '''
         Create data frames for main dataset and distance dataset
         '''
         self.df_main = pd.DataFrame()
         self.df_dist = pd.DataFrame()
-        
        
     def read_maindata(self):
         self.df_main = pd.read_csv(self.__filein_main, 
@@ -85,7 +85,6 @@ class SetupIPEDSData:
                     3='Private for-profit 4-year or above'
            (we use sector_revised, where 4-year univs that don't grant diplomas are removed)
         '''
-
         tmp = self.df_main
         tmp = tmp[tmp['academicyear']=='2012']
         tmp = tmp[tmp['sector_revised'].isin(['1','2','3'])] # note that sector is read as object
@@ -106,12 +105,14 @@ class SetupIPEDSData:
         Filter the distance data base on level of student (undergrad)
         '''
         
-        
-        
-        
+    def get_data(self):
+        self.read_maindata()
+        self.filter_maindata()
+        self.detect_nan_retrate()
+        return self.df_main
         
     # private variables
-    __filein_main = '../data/IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
+#    __filein_main = '../data/IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
 #    __filein_dist = '../data/EF2012A_DIST/ef2012a_dist_rv.csv'
+    __filein_main = '../data/delta_public_00_12.csv'  
     __filein_dist = '../data/EF2013A_DIST/ef2013a_dist.csv'
-
