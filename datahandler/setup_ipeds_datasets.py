@@ -114,5 +114,5 @@ class SetupIPEDSData:
     # private variables
 #    __filein_main = '../data/IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
 #    __filein_dist = '../data/EF2012A_DIST/ef2012a_dist_rv.csv'
-    __filein_main = '../data/delta_public_00_12.csv'  
-    __filein_dist = '../data/EF2013A_DIST/ef2013a_dist.csv'
+    __filein_main = './data/delta_public_00_12.csv'  
+    __filein_dist = './data/EF2013A_DIST/ef2013a_dist.csv'

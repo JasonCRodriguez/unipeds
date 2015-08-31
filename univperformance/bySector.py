@@ -4,7 +4,7 @@ Created on Jul 26, 2015
 @author: J4ROD2
 '''
 import numpy as np
-import matplotlib
+import matplotlib.pyplot as p
 import pandas as pd 
 
 class bySector(object):
@@ -21,7 +21,7 @@ class bySector(object):
         
     def summary(self, target_var):
         # basic table with summary stats by some target variable
-        self.df_by_sector[target_var].agg([np.sum, np.mean, np.std, len])
+        return self.df_by_sector[target_var].agg([np.sum, np.mean, np.std, len])
         
     def plot(self, target_var):
         self.df_by_sector.boxplot(by=self.sector, column = target_var)
