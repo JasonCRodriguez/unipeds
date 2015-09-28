@@ -50,7 +50,7 @@
 
 <body>
 
-   <div class="folium-map" id="folium_63e4c26b0a0a41fdbada3d36f0a647dc" style="width: 100%; height: 100%"></div>
+   <div class="folium-map" id="folium_8c83e51c0de5437a8c6138a2affe0caa" style="width: 100%; height: 100%"></div>
 
    <script>
 
@@ -94,9 +94,9 @@
       /*
       Creates the map and adds the selected layers
       */
-      var map = L.map('folium_63e4c26b0a0a41fdbada3d36f0a647dc', {
-                                       center:[45.5236, -122.675],
-                                       zoom: 10,
+      var map = L.map('folium_8c83e51c0de5437a8c6138a2affe0caa', {
+                                       center:[0, 0],
+                                       zoom: 1,
                                        maxBounds: bounds,
                                        layers: [base_tile]
                                      });
@@ -113,7 +113,7 @@
       
 
       
-      var circle_1 = L.circle([45.5215, -122.6261], 1500, {
+      var circle_1 = L.circle([40.4621969721, -120.693339843], 15000, {
                             color: '#3186cc',
                             fillColor: '#3186cc',
                             fillOpacity: 0.2
@@ -122,7 +122,59 @@
       circle_1._popup.options.maxWidth = 300;
       map.addLayer(circle_1)
       
-
+      var circle_2 = L.circle([41.9899425889, -120.280148739], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_2.bindPopup("My Popup Info");
+      circle_2._popup.options.maxWidth = 300;
+      map.addLayer(circle_2)
+      
+      var circle_3 = L.circle([41.6836456316, -120.099312439], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_3.bindPopup("My Popup Info");
+      circle_3._popup.options.maxWidth = 300;
+      map.addLayer(circle_3)
+      
+      var circle_4 = L.circle([41.2898913002, -120.339253924], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_4.bindPopup("My Popup Info");
+      circle_4._popup.options.maxWidth = 300;
+      map.addLayer(circle_4)
+      
+      var circle_5 = L.circle([40.4950450532, -120.285549017], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_5.bindPopup("My Popup Info");
+      circle_5._popup.options.maxWidth = 300;
+      map.addLayer(circle_5)
+      
+      var circle_6 = L.circle([40.9115559094, -121.06306061], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_6.bindPopup("My Popup Info");
+      circle_6._popup.options.maxWidth = 300;
+      map.addLayer(circle_6)
+      
+      var circle_7 = L.circle([41.519939255, -121.029157234], 15000, {
+                            color: '#3186cc',
+                            fillColor: '#3186cc',
+                            fillOpacity: 0.2
+                            });
+      circle_7.bindPopup("My Popup Info");
+      circle_7._popup.options.maxWidth = 300;
+      map.addLayer(circle_7)
       
 
       
@@ -131,6 +183,13 @@
 
       
 
+      
+
+
+
+map.fitBounds([[40.46219697214699, -120.69333984295936], [41.9899425889419, -120.28014873859769], [41.68364563160937, -120.09931243854311], [41.289891300228454, -120.33925392373557], [40.49504505320464, -120.28554901708691], [40.91155590935779, -121.06306060991857], [41.51993925499943, -121.02915723412765]],
+    {}
+);
 
 
    </script>

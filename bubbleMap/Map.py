@@ -14,13 +14,18 @@ class Mapper(object):
         '''
         Constructor
         '''
-    def create_latlong(self):
-        import
-        
+    def create_latlong(self,count):
+        self.count = count
+        import random
+        return  [(random.uniform(40,42), random.uniform(-122,-120)) for n in range(1,self.count)]
+    
     def write(self):
         import folium
-        map_osm = folium.Map(location=[45.5236, -122.6750])
-        map_osm.circle_marker(location=(45.5215, -122.6261), radius=1500,
-                  popup='My Popup Info', line_color='#3186cc',
-                  fill_color='#3186cc', fill_opacity=0.2)
+        map_osm = folium.Map()
+        self.latlong = self.create_latlong(8)
+        for point in self.latlong:
+            map_osm.circle_marker(location=point, radius=15000,
+                                          popup='My Popup Info', line_color='#3186cc',
+                                          fill_color='#3186cc', fill_opacity=0.2)
+        map_osm.fit_bounds(self.latlong)
         return map_osm.create_map(path='osm.html')
