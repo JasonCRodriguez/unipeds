@@ -14,18 +14,25 @@ class SetupIPEDSData:
     '''
     Read, filter, merge two IPEDS datasets:     
     1) IPEDS Analytics Delta Cost Analytics Data 1987-2012 
-    2) Distance data
+    2) Distance data 
     
     Also, detect nan in the retentionrate entry and add that info to
     the main dataframe
+    
+    2016-02-21
+    merging distance dataset to main dataset is halted for now     
+    instead, reading geolocation data and merge it to main dataset 
+    
     '''
     def __init__(self):
         '''
-        Create data frames for main dataset and distance dataset
+        Create data frames for main dataset, distance dataset, Geolocation dataset
         '''
         self.df_main = pd.DataFrame()
         self.df_dist = pd.DataFrame()
+        self.df_geol = pd.DataFrame()
        
+   # ***************** main dataset  *****************   
     def read_maindata(self):
         self.df_main = pd.read_csv(self.__filein_main, 
              sep = ',',
@@ -74,7 +81,9 @@ class SetupIPEDSData:
              "ft_faculty_salary",
              "full_time_employee_100fte",
              "sector",
-             "sector_revised"
+             "sector_revised",
+             "zip",
+             "instname"
         ])
 
     def filter_maindata(self):
@@ -97,22 +106,68 @@ class SetupIPEDSData:
         '''
         self.df_main['missing_ret'] = np.isnan(self.df_main.ftretention_rate)
 
-    def read_distdata(self):
-        self.df_dist = pd.read_csv(self.__filein_dist)
-        
-    def filter_distdata(self):
-        '''
-        Filter the distance data base on level of student (undergrad)
-        '''
-        
     def get_data(self):
         self.read_maindata()
         self.filter_maindata()
         self.detect_nan_retrate()
+        self.read_geoldata()
+        self.merge_geoldata()
         return self.df_main
         
-    # private variables
-#    __filein_main = '../data/IPEDS_Analytics_DCP_87_12_CSV/delta_public_00_12.csv'
-#    __filein_dist = '../data/EF2012A_DIST/ef2012a_dist_rv.csv'
+   # ***************** distance education dataset  *****************   
+    def read_distdata(self):
+        self.df_dist = pd.read_csv(self.__filein_dist)
+        
+    def rename_distdata(self):
+        '''
+        Later we want to merge the main dataframe and distance education dataframe, with 
+        the common column 'unitid' as the key.
+        '''
+        self.df_dist.rename(columns={'UNITID': 'unitid'}, inplace=True)
+
+    def filter_distdata(self):
+        '''
+        focus on degre seekng studens
+        '''
+        tmp = self.df_dist
+        tmp = tmp[tmp['EFDELEV']==3]
+        self.df_dist = tmp
+
+    def get_distdata(self):
+        self.read_distdata()
+        self.rename_distdata()
+        self.filter_distdata()
+        return self.df_dist
+ 
+   # ***************** geo location dataset *****************   
+    def read_geoldata(self):
+        self.df_geol = pd.read_csv(self.__filein_geol, dtype = {'unitid':'str'})
+    
+    def merge_geoldata(self):        
+        self.df_geol = self.df_geol[list(['unitid','lat','long'])]         
+        self.df_main = pd.merge(self.df_main, self.df_geol, left_on='unitid', right_on='unitid')
+
+    def get_geoldata(self):
+        self.read_geoldata()
+        return self.df_geol
+
+   # ***************** merging different datasets*****************   
+   # add geolocation data to main dataframe              
+   # geolocation data file was created from the filtered maindataset
+   # so we can simply concatinate lat/long columns to the main datafram. 
+       
+#       def merge_geoldata(self):
+ #          self.read_geoldata()       
+  #         self.df_geol
+   #        self.df_main 
+       
+    
+
+        
+        
+  # ***************** below is for defining (private) variables  *****************   
     __filein_main = './data/delta_public_00_12.csv'  
-    __filein_dist = './data/EF2013A_DIST/ef2013a_dist.csv'
+    __filein_dist = './data/ef2012a_dist_rv.csv'
+    __filein_geol = './data/GeolocData.csv'
+    
+    
