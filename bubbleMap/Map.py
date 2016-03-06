@@ -4,10 +4,8 @@ Created on Sep 27, 2015
 @author: J4ROD2
 '''
 from brewer2mpl import qualitative
-from pandas import read_csv
 
-
-class Mapper(object):
+class mapper(object):
     '''
     classdocs
     '''
@@ -17,25 +15,44 @@ class Mapper(object):
         '''
         Constructor
         '''
+    # create a fake data set for testing
     def create_latlong_df(self,count):
+
         self.count = count
         import random
-        return  [(random.uniform(40,42), random.uniform(-122,-120)) for n in range(1,self.count)]
-    
+        import pandas as pd
+        
+	self.latitude = pd.Series([random.uniform(40,42) for n in range(1, self.count)])
+	self.longitude = pd.Series([random.uniform(-122,-120) for n in range(1, self.count)])
+	self.color_val = pd.Series([random.randint(0,4) for n in range(1,self.count)])
+	return pd.DataFrame({'latitude':self.latitude, 'longitude':self.longitude, 'color_val':self.color_val})
+
     def get_color(self,value):
         self.value = value
         import brewer2mpl
         self.bmap = brewer2mpl.get_map('RdBu', 'diverging', 5)
         return self.bmap.hex_colors[value]
 
-    def get_universities(self,csv):
+    # convert a df into a geojson file 
+    # http://geoffboeing.com/2015/10/exporting-python-data-geojson/
 
+    def df_to_geojson(df, properties, lat='latitude', lon='longitude'):
+    	geojson = {'type':'FeatureCollection', 'features':[]}
 
-        # read the csv into a dataframe
-        self.df = read_csv(csv, sep=",")
+   	for _, row in df.iterrows():
+            feature = {'type':'Feature',
+                'properties':{},
+                'geometry':{'type':'Point',
+                            'coordinates':[]}}
 
-        # strip out extra columns leaving only lat, long, and size 
-    
+        feature['geometry']['coordinates'] = [row[lon],row[lat]]
+
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        geojson['features'].append(feature)
+
+        return geojson 
+
     def write(self):
         import folium
         map_osm = folium.Map()
@@ -43,10 +60,14 @@ class Mapper(object):
         
         import random
         
-        for point in self.latlong:
-            self.color_val = random.randint(0,4)
-            map_osm.circle_marker(location=point, radius=8000*(self.color_val+1),
-                popup='My Popup Info', line_color=self.get_color(self.color_val),
-                fill_color=self.get_color(self.color_val), fill_opacity=0.8)
-            map_osm.fit_bounds(self.latlong)
+        map_osm.circle_marker(location=point, radius=8000*(self.color_val+1),
+            popup='My Popup Info', line_color=self.get_color(self.color_val),
+            fill_color=self.get_color(self.color_val), fill_opacity=0.8)
+
+        map_osm.fit_bounds(self.latlong)
+
         return map_osm.create_map(path='osm.html')
+
+if __name__ == "main":
+    print "hello"
+>>>>>>> 6b94f0b7f13306aba950c71ad3797eb27422393a

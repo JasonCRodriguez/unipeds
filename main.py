@@ -1,5 +1,5 @@
-import bySector as bs
-import setup_ipeds_datasets as sid
+from univperformance import bySector as bs
+from datahandler import setup_ipeds_datasets as sid
 
 # x  = sid.SetupIPEDSData()
 # df = x.get_data()
