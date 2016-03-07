@@ -36,22 +36,23 @@ class mapper(object):
     # convert a df into a geojson file 
     # http://geoffboeing.com/2015/10/exporting-python-data-geojson/
 
-    def df_to_geojson(df, properties, lat='latitude', lon='longitude'):
+    def df_to_geojson(self, df, properties, lat='lat', lon='long'):
+
     	geojson = {'type':'FeatureCollection', 'features':[]}
 
-   	for _, row in df.iterrows():
+        for _, row in df.iterrows():
             feature = {'type':'Feature',
                 'properties':{},
                 'geometry':{'type':'Point',
                             'coordinates':[]}}
 
-        feature['geometry']['coordinates'] = [row[lon],row[lat]]
+            feature['geometry']['coordinates'] = [row[lon],row[lat]]
 
-        for prop in properties:
-            feature['properties'][prop] = row[prop]
-        geojson['features'].append(feature)
+            for prop in properties:
+                feature['properties'][prop] = row[prop]
+            geojson['features'].append(feature)
 
-        return geojson 
+        return geojson
 
     def write(self):
         import folium
@@ -68,6 +69,20 @@ class mapper(object):
 
         return map_osm.create_map(path='osm.html')
 
-if __name__ == "main":
-    print "hello"
->>>>>>> 6b94f0b7f13306aba950c71ad3797eb27422393a
+if __name__ == "__main__":
+
+    from datahandler import setup_ipeds_datasets as ips
+
+    dh = ips.SetupIPEDSData()
+    data = dh.get_data()
+
+    m = mapper()
+    geoj = m.dif_to_geojson(data, ['zip', 'instname', 'ftretention_rate', 'fall_total_undergrad'],
+            lat='lat', lon='long')
+
+    print(geoj)
+
+    with open("unipeds.geojson", "w") as f:
+        f.write(geoj)
+
+    f.close()
